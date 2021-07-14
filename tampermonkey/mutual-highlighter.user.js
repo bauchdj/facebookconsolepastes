@@ -2,7 +2,7 @@
 // @name         Mutual Friends Highlighter
 // @namespace    https://pgattic.github.io
 // @version      1
-// @description  Press the minus ("-") key to cancel the bottom friend request loaded in the list after clicking "View Sent Requests"
+// @description  Highlights people with specified mutual friends or more
 // @author       pgattic, bauchdj
 // @match        https://www.facebook.com/*/friends_current_city
 // @icon         https://static.xx.fbcdn.net/rsrc.php/yD/r/d4ZIVX-5C-b.ico
