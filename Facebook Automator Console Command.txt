@@ -1,0 +1,49 @@
+//	Bottom Friend Request Canceller (type - to cancel friend requests)
+document.addEventListener("keydown",e=>{if(e.key=="-"){document.querySelectorAll('[aria-label="Cancel Request"]')[document.querySelectorAll('[aria-label="Cancel Request"]').length-1].click()}})
+
+
+//	Gets class identifier for buttons on page
+document.querySelector('[role="banner"]').firstElementChild.firstElementChild.firstElementChild.classList.value
+
+
+//	Return Array containing references to every button on the screen
+Array.from(document.querySelectorAll('[class="'+document.querySelector('[role="banner"]').firstChild.firstChild.firstChild.classList.value+'"]'))
+
+
+//	Return Array containing all buttons with titles that include "mutual friends"
+Array.from(document.querySelectorAll('[class="'+document.querySelector('[role="banner"]').firstChild.firstChild.firstChild.classList.value+'"]')).filter(out=>out.innerText.contains("mutual friends"))
+
+
+//	Highlight those who have more than x mutual friends (x is 10 currently) and updates every 300 miliseconds
+setInterval(()=>{for(var i of Array.from(document.querySelectorAll('[class="'+document.querySelector('[role="banner"]').firstChild.firstChild.firstChild.classList.value+'"]')).filter(out=>out.innerText.contains("mutual friends"))){var t=i.innerText;if(Number(t.slice(0,t.length-14))>10){i.parentNode.parentNode.parentNode.parentNode.parentNode.parentNode.parentNode.style.background="#bfd"}}},300)
+//~~~~~~~~Light green highlight hex #bfd; Pink highlight #f0f
+
+//Awesome Code!
+var allMutuals=Array.from(document.querySelectorAll('[class="'+document.querySelector('[role="banner"]').firstElementChild.firstElementChild.firstElementChild.classList.value+'"]')).filter(out=>out.innerText.contains("mutual friends"));
+function getMutuals() {
+	setInterval(()=>{for(var i of allMutuals){var t=i.innerText;if(Number(t.slice(0,t.length-14))>10){i.parentNode.parentNode.parentNode.parentNode.parentNode.parentNode.parentNode.style.background="#bfd"}}},300) //highlights all mutual friends
+}
+var friendButtons=Array.from(document.querySelectorAll('[class="'+document.querySelector('[aria-label="Account Controls and Settings"]').children[4].firstElementChild.children[1].firstChild.classList.value+'"]')).filter(out=>out.innerText=="Add Friend"||out.innerText=="Cancel Request");
+//function (out){out.innerText.contains()} is equal to (out)=>{out.innerText.contains()}
+var friendIndex=0;
+function changeFriend(num) {
+	allMutuals[friendIndex].parentNode.parentNode.parentNode.parentNode.parentNode.parentNode.parentNode.style.background="#bfd"; //change color to original
+	friendIndex+=num; //inc or dec index
+	if (friendIndex<0){friendIndex=0} //prevents negatives
+	console.log(friendIndex);
+	allMutuals[friendIndex].parentNode.parentNode.parentNode.parentNode.parentNode.parentNode.parentNode.style.background="#f00"; //change color to selected color
+}
+document.addEventListener("keydown",e=>{
+	e.preventDefault();
+	switch (e.key) {
+		case "ArrowUp":
+		case "ArrowLeft":
+			changeFriend(-1);
+			break;
+		case "ArrowDown":
+		case "ArrowRight":
+			changeFriend(1);
+			break;
+	}
+})
+
