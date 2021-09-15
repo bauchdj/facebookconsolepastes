@@ -1,4 +1,4 @@
-//Get Page likes
+//    Get Page likes
 length="";
 names="";
 for(var i of document.querySelectorAll('[class="_3cb8"]')){
@@ -9,7 +9,7 @@ console.log(names);
 console.log(length);
 
 
-//List friends' names (I use it to get recent friends' names)
+//    List friends' names (I use it to get recent friends' names)
 length="";
 names="";
 for(var i of document.querySelectorAll('[class="d2edcug0 hpfvmrgz qv66sw1b c1et5uql lr9zc1uh a8c37x1j keod5gw0 nxhoafnm aigsh9s9 d3f4x2em fe6kdd0r mau55g9w c8b282yb mdeji52x a5q79mjw g1cxx5fr lrazzd5p oo9gr5id"]')){
@@ -19,7 +19,7 @@ console.log(length);
 console.log(names);
 
 
-//Get names of post reactions
+//    Get names of post reactions
 links='';
 for(var i of document.querySelectorAll('[class="oajrlxb2 gs1a9yip g5ia77u1 mtkw9kbi tlpljxtp qensuy8j ppp5ayq2 goun2846 ccm00jje s44p3ltw mk2mc5f4 rt8b4zig n8ej3o3l agehan2d sk4xxmp2 rq0escxv nhd2j8a9 q9uorilb mg4g778l btwxx1t3 pfnyh3mw p7hjln8o kvgmc6g5 cxmmr5t8 oygrvhab hcukyx3x tgvbjcpo hpfvmrgz jb3vyjys rz4wbd8a qt6c0cv9 a8nywdso l9j0dhe7 i1ao9s8h esuyzwwr f1sip0of du4w35lb lzcic4wl abiwlrkh p8dawk7l oo9gr5id"]')){
 if(!i.href.includes("stories")){
@@ -29,4 +29,13 @@ if(!i.href.includes("stories")){
 console.log(links);
 
 
-//
+//	  Highlight those who have more than x mutual friends (x is 10 currently) and updates every 300 miliseconds
+setInterval(()=>{for(var i of Array.from(document.querySelectorAll('[class="'+document.querySelector('[role="banner"]').firstChild.firstChild.firstChild.classList.value+'"]')).filter(out=>out.innerText.contains("mutual friends"))){var t=i.innerText;if(Number(t.slice(0,t.length-14))>10){i.parentNode.parentNode.parentNode.parentNode.parentNode.parentNode.parentNode.style.background="#bfd"}}},300)
+//~~~~~~~~Light green highlight hex #bfd; Pink highlight #f0f
+
+
+//	  Bottom Friend Request Canceller (type - to cancel friend requests)
+document.addEventListener("keydown",e=>{if(e.key=="-"){document.querySelectorAll('[aria-label="Cancel Request"]')[document.querySelectorAll('[aria-label="Cancel Request"]').length-1].click()}})
+
+
+//    
