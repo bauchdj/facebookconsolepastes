@@ -69,4 +69,11 @@ setInterval(()=>{for(var i of Array.from(document.querySelectorAll('[class="'+do
 document.addEventListener("keydown",e=>{if(e.key=="-"){document.querySelectorAll('[aria-label="Cancel Request"]')[document.querySelectorAll('[aria-label="Cancel Request"]').length-1].click()}})
 
 
+//    Change to blocked people and scroll down to text box (keep click middle of screen to have it re-scroll down after loading people)
+document.querySelectorAll('[class="_55pi _2agf _4o_4 _4jy0 _4jy3 _517h _51sy _42ft"]')[0].click();
+document.querySelectorAll('[class="_54ni __MenuItem"]')[2].click();
+setTimeout(function(){document.querySelectorAll('[class="_fn2 _42fu _42ft"]')[0].click()},500);
+setInterval(function(){document.querySelectorAll('[class="_58al"]')[1].focus();},500);
+
+
 //    
