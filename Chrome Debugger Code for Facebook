@@ -1,16 +1,6 @@
 /////////////   Chrome Debugger => Ctrl+Shift+P or Run Command => type >"focused" Make sure it says "Emulate a focused page"
 //https://stackoverflow.com/questions/28963272/how-can-i-inspect-html-element-that-disappears-from-dom-on-lost-focus
 
-//    Get Page likes
-length="";
-names="";
-for(var i of document.querySelectorAll('[class="_3cb8"]')){
-  length++;
-  names=names+"\n"+i.outerText+"\t"+i.href;
-}
-console.log(names);
-console.log(length);
-
 
 //    Get Page Likes and copy to clipboard and stop at last name (you have to give it a name) MAKE SURE "Rendering Emulate a focused page" is enable! LINE 1
 lastperson="";
