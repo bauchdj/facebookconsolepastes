@@ -1,3 +1,6 @@
+/////////////   Chrome Debugger => Ctrl+Shift+P or Run Command => type >"focused" Make sure it says "Emulate a focused page"
+//https://stackoverflow.com/questions/28963272/how-can-i-inspect-html-element-that-disappears-from-dom-on-lost-focus
+
 //    Get Page likes
 length="";
 names="";
@@ -9,6 +12,27 @@ console.log(names);
 console.log(length);
 
 
+//    Get Page Likes and copy to clipboard and stop at last name (you have to give it a name) MAKE SURE "Rendering Emulate a focused page" is enable! LINE 1
+lastperson="NAME"
+length="";
+value="";
+for(var i of document.querySelectorAll('[class="_3cb8"]')){
+    if(i.outerText.includes(lastperson)){
+        break;
+    }
+    length++;
+    value=value+i.outerText+"\t"+i.href+"\n";
+}
+const type = 'text/plain';
+const blob = new Blob([value], { type });
+const cbi = new ClipboardItem({
+    [type]: blob
+});
+navigator.clipboard.write([cbi]);
+console.log(value);
+console.log(length);
+
+
 //    List friends' names (I use it to get recent friends' names)
 length="";
 names="";
@@ -17,16 +41,6 @@ for(var i of document.querySelectorAll('[class="d2edcug0 hpfvmrgz qv66sw1b c1et5
 };
 console.log(length);
 console.log(names);
-
-
-//    Get names of post reactions
-links='';
-for(var i of document.querySelectorAll('[class="oajrlxb2 gs1a9yip g5ia77u1 mtkw9kbi tlpljxtp qensuy8j ppp5ayq2 goun2846 ccm00jje s44p3ltw mk2mc5f4 rt8b4zig n8ej3o3l agehan2d sk4xxmp2 rq0escxv nhd2j8a9 q9uorilb mg4g778l btwxx1t3 pfnyh3mw p7hjln8o kvgmc6g5 cxmmr5t8 oygrvhab hcukyx3x tgvbjcpo hpfvmrgz jb3vyjys rz4wbd8a qt6c0cv9 a8nywdso l9j0dhe7 i1ao9s8h esuyzwwr f1sip0of du4w35lb lzcic4wl abiwlrkh p8dawk7l oo9gr5id"]')){
-if(!i.href.includes("stories")){
-        links=links+i.href.replace('&','?').split('?')[0]+"\n"
-    }
-}
-console.log(links);
 
 
 //    Get names of post reactions, and stop at last person
@@ -72,8 +86,8 @@ document.addEventListener("keydown",e=>{if(e.key=="-"){document.querySelectorAll
 //    Change to blocked people and scroll down to text box (keep click middle of screen to have it re-scroll down after loading people)
 document.querySelectorAll('[class="_55pi _2agf _4o_4 _4jy0 _4jy3 _517h _51sy _42ft"]')[0].click();
 document.querySelectorAll('[class="_54ni __MenuItem"]')[2].click();
-setTimeout(function(){document.querySelectorAll('[class="_fn2 _42fu _42ft"]')[0].click()},500);
-setInterval(function(){document.querySelectorAll('[class="_58al"]')[1].focus();},500);
+setTimeout(function(){document.querySelectorAll('[class="_fn2 _42fu _42ft"]')[0].click()},250);
+setInterval(function(){document.querySelectorAll('[class="_58al"]')[1].focus();},250);
 
 
 //    
