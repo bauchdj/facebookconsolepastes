@@ -1,4 +1,4 @@
-/////////////   Chrome Debugger => Ctrl+Shift+P or Run Command => type >"focused" Make sure it says "Emulate a focused page"
+/////////////   Chrome Debugger => Ctrl+Shift+P or Run Command => type "emfo" Make sure it says "Emulate a focused page" this is also under the Rendering tab at the bottom
 //https://stackoverflow.com/questions/28963272/how-can-i-inspect-html-element-that-disappears-from-dom-on-lost-focus
 
 
