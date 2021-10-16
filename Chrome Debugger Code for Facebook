@@ -65,19 +65,26 @@ console.log(names);
 console.log(length);
 
 
-//   Get profiles how have commented NOTE: socoteam is list of all people who may comment, to add to it put "|" and their name. Look at variable for reference
-const lastperson="Paste most recent name on sheet";
+//   Get profiles how have commented and comment link (sadly the link doesn't always work) 
+     NOTE: socoteam is list of all people who should be excluded, to add to it by putting a "|" and their name. Look at the variable for reference (ex. "|Larkins")
+const lastperson="TESTING";
 const socoteam = new RegExp("Author|Talk of Christ in Southern Colorado|Bauch|Larkins");
-const linkcutoff = /\?_|\?comment|\&_|\&comment/
 var names="";
 var length=0;
-for(var i of document.querySelectorAll('[class="oajrlxb2 g5ia77u1 qu0x051f esr5mh6w e9989ue4 r7d6kgcz rq0escxv nhd2j8a9 nc684nl6 p7hjln8o kvgmc6g5 cxmmr5t8 oygrvhab hcukyx3x jb3vyjys rz4wbd8a qt6c0cv9 a8nywdso i1ao9s8h esuyzwwr f1sip0of lzcic4wl gmql0nx0 gpro0wi8"]')) {
-    if(i.outerText.includes(lastperson)){
+for(var i of document.querySelectorAll('[class="rj1gh0hx buofh1pr ni8dbmo4 stjgntxs hv4rvrfc"]')) {
+var comment=i.firstChild.firstChild.firstChild.firstChild.firstChild.firstChild.firstChild.firstChild
+var gifcomment=i.firstChild.firstChild.firstChild.firstChild.firstChild.firstChild
+var link=i.lastChild.lastChild.children[1].href.split(/\&__cft/)[0]
+    if(comment.outerText.includes(lastperson)){
         break;
     }
-    if(!socoteam.test(i.outerText)){
-        names=names+i.outerText+"\t"+i.href.split(linkcutoff)[0]+"\n";
-        length++
+    if(!socoteam.test(comment.outerText)){
+        if(i.children.length>2){
+            names=names+gifcomment.outerText+"\t"+gifcomment.href.split(/\?_|\?comment|\&_|\&comment/)[0]+"\t"+link+"\n";
+        } else {
+            names=names+comment.outerText+"\t"+comment.href.split(/\?_|\?comment|\&_|\&comment/)[0]+"\t"+link+"\n";
+        }
+    length++
     }
 }
 const type = 'text/plain';
