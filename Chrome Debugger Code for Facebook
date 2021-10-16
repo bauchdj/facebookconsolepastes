@@ -67,24 +67,34 @@ console.log(length);
 
 //   Get profiles how have commented and comment link (sadly the link doesn't always work) 
      NOTE: socoteam is list of all people who should be excluded, to add to it by putting a "|" and their name. Look at the variable for reference (ex. "|Larkins")
-const lastperson="TESTING";
+const lastperson="Paste most recent name on sheet";
 const socoteam = new RegExp("Author|Talk of Christ in Southern Colorado|Bauch|Larkins");
 var names="";
 var length=0;
-for(var i of document.querySelectorAll('[class="rj1gh0hx buofh1pr ni8dbmo4 stjgntxs hv4rvrfc"]')) {
-var comment=i.firstChild.firstChild.firstChild.firstChild.firstChild.firstChild.firstChild.firstChild
-var gifcomment=i.firstChild.firstChild.firstChild.firstChild.firstChild.firstChild
-var link=i.lastChild.lastChild.children[1].href.split(/\&__cft/)[0]
-    if(comment.outerText.includes(lastperson)){
-        break;
+function getcomment(comment) {
+    if(!socoteam.test(comment)){
+	    names=names+comment.outerText+"\t"+comment.href.split(/\?_|\?comment|\&_|\&comment/)[0]+"\t"+commentIdLink+"\n";
+        length++
     }
-    if(!socoteam.test(comment.outerText)){
-        if(i.children.length>2){
-            names=names+gifcomment.outerText+"\t"+gifcomment.href.split(/\?_|\?comment|\&_|\&comment/)[0]+"\t"+link+"\n";
-        } else {
-            names=names+comment.outerText+"\t"+comment.href.split(/\?_|\?comment|\&_|\&comment/)[0]+"\t"+link+"\n";
-        }
-    length++
+}
+for(var i of document.querySelectorAll('[class="rj1gh0hx buofh1pr ni8dbmo4 stjgntxs hv4rvrfc"]')) {
+	var baseCommentPath=i.firstChild.firstChild.firstChild.firstChild.firstChild.firstChild;
+    var lastComment=i.firstChild.firstChild.firstChild.firstChild.firstChild.firstChild.firstChild.firstChild.outerText;
+	if((lastComment.includes(lastperson)/* || baseCommentPath.firstChild.firstChild.outerText.includes(lastperson)*/)){ //breaks loop at most recent name already retrieved
+		break;
+	}
+	var numofoptions=i.lastChild.children.length;
+//gets correct comment id link
+	if(/Edited/.test(i.lastChild.lastChild.outerText)){
+		var commentIdLink=i.lastChild.children[numofoptions-2].children[1].href.split(/\&__cft/)[0];
+	} else {
+		var commentIdLink=i.lastChild.lastChild.children[1].href.split(/\&__cft/)[0];
+	}
+//filters between two different layers in which the outerText and href properties are
+    if (baseCommentPath.href !== undefined) {
+        getcomment(baseCommentPath);
+    } else if (baseCommentPath.firstChild.firstChild.href !== undefined) {
+        getcomment(baseCommentPath.firstChild.firstChild);
     }
 }
 const type = 'text/plain';
