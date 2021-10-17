@@ -3,7 +3,7 @@
 
 
 //    Get Page Likes and copy to clipboard and stop at last name (you have to give it a name) MAKE SURE "Rendering Emulate a focused page" is enable! LINE 1
-const lastperson="Paste most recent name on sheet";
+const lastperson="Paste most recent name in sheet";
 var names="";
 var length=0;
 for(var i of document.querySelectorAll('[class="_3cb8"]')){
@@ -24,7 +24,7 @@ console.log(length);
 
 
 //    Get names of post reactions, and stop at last person
-const lastperson="Paste most recent name on sheet";
+const lastperson="Paste most recent name in sheet";
 const linkcutoff = /\?_|\?comment|\&_|\&comment/
 var names="";
 var length=0;
@@ -66,36 +66,32 @@ console.log(length);
 
 
 //   Get profiles how have commented and comment link (sadly the link doesn't always work) 
-     NOTE: socoteam is list of all people who should be excluded, to add to it by putting a "|" and their name. Look at the variable for reference (ex. "|Larkins")
-const lastperson="Paste most recent name on sheet";
-const socoteam = new RegExp("Author|Talk of Christ in Southern Colorado|Bauch|Larkins");
+const lastperson="Paste moset recent name in sheet";
 var names="";
 var length=0;
-function getcomment(comment) {
-    if(!socoteam.test(comment)){
-	    names=names+comment.outerText+"\t"+comment.href.split(/\?_|\?comment|\&_|\&comment/)[0]+"\t"+commentIdLink+"\n";
-        length++
-    }
+function getComment(commenterName, commentText) {
+	names=names+commenterName.outerText+"\t"+commenterName.href.split(/\?_|\?comment|\&_|\&comment/)[0]+"\t"+commentIdLink+"\t"+commentText.outerText.split("\n")[1]+"\n";
+	length++;
 }
-for(var i of document.querySelectorAll('[class="rj1gh0hx buofh1pr ni8dbmo4 stjgntxs hv4rvrfc"]')) {
-	var baseCommentPath=i.firstChild.firstChild.firstChild.firstChild.firstChild.firstChild;
-    var lastComment=i.firstChild.firstChild.firstChild.firstChild.firstChild.firstChild.firstChild.firstChild.outerText;
-	if((lastComment.includes(lastperson)/* || baseCommentPath.firstChild.firstChild.outerText.includes(lastperson)*/)){ //breaks loop at most recent name already retrieved
+for (var i of document.querySelectorAll('[class="rj1gh0hx buofh1pr ni8dbmo4 stjgntxs hv4rvrfc"]')) {
+	var baseCommentPath=i.firstChild.firstChild.firstChild.firstChild;
+	var baseProfilePath=i.firstChild.firstChild.firstChild.firstChild.firstChild.firstChild;
+//breaks loop at most recent name already in sheet
+	if (baseProfilePath.firstChild.firstChild.outerText.includes(lastperson)){
 		break;
 	}
-	var numofoptions=i.lastChild.children.length;
 //gets correct comment id link
-	if(/Edited/.test(i.lastChild.lastChild.outerText)){
-		var commentIdLink=i.lastChild.children[numofoptions-2].children[1].href.split(/\&__cft/)[0];
+	if (/Edited/.test(i.lastChild.lastChild.outerText)){
+		var commentIdLink=i.lastChild.children[i.lastChild.children.length-2].children[1].href.split(/\&__cft/)[0];
 	} else {
 		var commentIdLink=i.lastChild.lastChild.children[1].href.split(/\&__cft/)[0];
 	}
-//filters between two different layers in which the outerText and href properties are
-    if (baseCommentPath.href !== undefined) {
-        getcomment(baseCommentPath);
-    } else if (baseCommentPath.firstChild.firstChild.href !== undefined) {
-        getcomment(baseCommentPath.firstChild.firstChild);
-    }
+//profiles differ, some have the outerText 6 'firstChild' in, others are 8 'firstChild' in
+	if (baseProfilePath.href !== undefined) {
+		getComment(baseProfilePath,baseCommentPath);
+	} else if (baseProfilePath.firstChild.firstChild.href !== undefined) {
+		getComment(baseProfilePath.firstChild.firstChild,baseCommentPath.firstChild.firstChild);
+	}
 }
 const type = 'text/plain';
 const blob = new Blob([names], { type });
