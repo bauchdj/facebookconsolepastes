@@ -66,42 +66,62 @@ console.log(length);
 
 
 //   Get profiles how have commented and comment link (sadly the link doesn't always work) 
-const lastperson=window.prompt("Paste moset recent name in sheet");
-var names="";
+var profiles="";
 var length=0;
-function getComment(commenterName, commentText) { //
-	names=names+commenterName.outerText+"\t"+commenterName.href.split(/\?_|\?comment|\&_|\&comment/)[0]+"\t"+commentIdLink+"\t"+commentText.outerText.split("\n")[1]+"\n";
-	length++;
+function main() {
+    const allComments=document.querySelectorAll('[class="rj1gh0hx buofh1pr ni8dbmo4 stjgntxs hv4rvrfc"]');
+    const lastperson=window.prompt("Paste moset recent name in sheet");
+    function isCommentEdited(comment) {
+        return /Edited/.test(comment.lastElementChild.lastElementChild.outerText);
+    }
+    function getChildren(object,childrenNum) {
+        var obj=object;
+        for(var i=0;i<childrenNum;i++) {
+            obj=obj.firstElementChild;
+        }
+        return obj;
+    }
+    var getCommentData = function(name,comment,txt) {
+        var array=[
+            name.outerText,
+            name.href.split(/\?_|\?comment|\&_|\&comment/)[0],
+            txt,
+            comment.outerText.split("\n")[1]
+        ]
+        return array.join("\t")+"\n";
+    }
+    for (var i of allComments) {
+        /*if (getChildren(i,2) === null) {
+            continue;
+        }*/
+        //breaks loop at most recent name already in sheet
+        if (getChildren(i,8).outerText.includes(lastperson)) {
+            break;
+        }
+        //gets correct comment id link based on whether it was edited or not
+        if (isCommentEdited(i)) {
+            var secondLast=i.lastElementChild.children.length-2;
+            var a=i.lastElementChild.children[secondLast];
+        } else {
+            var a=i.lastElementChild.lastElementChild;
+        }
+        var commentIdLink=a.children[1].href.split(/\&__cft/)[0];
+        //comments differ, some are 6 children while others are 8 children deep
+        if (getChildren(i,6).href !== undefined) {
+            profiles+=getCommentData(getChildren(i,6),getChildren(i,4),commentIdLink);
+            length++;
+        } else if (getChildren(i,8).href !== undefined) {
+            profiles+=getCommentData(getChildren(i,8),getChildren(i,6),commentIdLink);
+            length++;
+        }
+    }
 }
-for (var i of document.querySelectorAll('[class="rj1gh0hx buofh1pr ni8dbmo4 stjgntxs hv4rvrfc"]')) {
-	if (i.firstElementChild.firstElementChild !== null) {
-		var baseCommentPath=i.firstElementChild.firstElementChild.firstElementChild.firstElementChild;
-		var baseProfilePath=i.firstElementChild.firstElementChild.firstElementChild.firstElementChild.firstElementChild.firstElementChild;
-//breaks loop at most recent name already in sheet
-		if (baseProfilePath.firstElementChild.firstElementChild.outerText.includes(lastperson)){
-			break;
-		}
-//gets correct comment id link
-		if (/Edited/.test(i.lastElementChild.lastElementChild.outerText)){
-			var commentIdLink=i.lastElementChild.children[i.lastElementChild.children.length-2].children[1].href.split(/\&__cft/)[0];
-		} else {
-			var commentIdLink=i.lastElementChild.lastElementChild.children[1].href.split(/\&__cft/)[0];
-		}
-//profiles differ, some have the outerText 6 'firstElementChild' in, others are 8 'firstElementChild' in
-		if (baseProfilePath.href !== undefined) {
-			getComment(baseProfilePath,baseCommentPath);
-		} else if (baseProfilePath.firstElementChild.firstElementChild.href !== undefined) {
-			getComment(baseProfilePath.firstElementChild.firstElementChild,baseCommentPath.firstElementChild.firstElementChild);
-		}
-	}
-}
+main();
 const type = 'text/plain';
-const blob = new Blob([names], { type });
-const cbi = new ClipboardItem({
-    [type]: blob
-});
+const blob = new Blob([profiles], { type });
+const cbi = new ClipboardItem({ [type]: blob });
 navigator.clipboard.write([cbi]);
-console.log(names);
+console.log(profiles);
 console.log(length);
 
 
