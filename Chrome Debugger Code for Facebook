@@ -150,4 +150,81 @@ setTimeout(function(){document.querySelectorAll('[class="_fn2 _42fu _42ft"]')[0]
 setInterval(function(){document.querySelectorAll('[class="_58al"]')[1].focus();},250);
 
 
-//    
+//    Instagram get Likes for Photo posts
+const lastPerson = new RegExp(prompt("Paste most recent name in sheet"));
+var profiles = '';
+var length = 0;
+var working = 0;
+var getNames = true;
+
+var getLikeData = function(name) {
+	var array=[
+		name.outerText,
+		name.href,
+		location.href,
+	]
+	return array.join("\t")+"\n";
+}
+
+var profilesClass = "            qF0y9          Igw0E   rBNOH        eGOV_     ybXk5    _4EzTm                                                                                   XfCBB          HVWg4                 ";
+var postLikes = document.querySelectorAll('[class="'+profilesClass+'"]');
+function getPostLikes() {
+	var numNames = 5;
+	postLikes = document.querySelectorAll('[class="'+profilesClass+'"]');
+	if (postLikes.length < 16) {
+		numNames = postLikes.length;
+		getNames = false;
+	}
+	for (j = 0; j < numNames; j++) {
+		var object = postLikes[j].children[1].firstElementChild.firstElementChild.firstElementChild.firstElementChild;
+		if(lastPerson.test(object.outerText)) { 
+			working = 1;
+			getNames = false;
+		} else if (working == 0){
+			profiles+=getLikeData(object);
+			length++;
+		}
+	}
+}
+
+function getNumScrolls() {
+	var numLikeOptions = 0;
+	if (document.querySelectorAll(".zV_Nj").length > 1) {
+		numLikeOptions = 1;
+	}
+	var numLikesString = document.querySelectorAll(".zV_Nj")[numLikeOptions].outerText.split(" others")[0];
+	var numLikes = parseInt(numLikesString);
+	return Math.floor(numLikes*60/300);
+}
+
+function printNames() {
+	//profiles = profiles.split(lastPerson)[0];
+	const type = 'text/plain';
+	const blob = new Blob([profiles], { type });
+	const cbi = new ClipboardItem({ [type]: blob });
+	navigator.clipboard.write([cbi]);
+	console.log(profiles);
+	console.log(length);
+	//console.log(profiles.match(/\n/g).length);
+}
+
+var pxScroll = 305;
+function main() {
+	if(working == 2){ return; }
+	if(working == 1){ working++; }
+	if (getNames) {
+		var divClass = "            qF0y9          Igw0E     IwRSH      eGOV_        vwCYk                                                                            i0EQd                                   ";
+		document.querySelectorAll('[class="'+divClass+'"]')[0].firstElementChild.scrollTop += pxScroll;
+		pxScroll = 300;
+		setTimeout(() => {getPostLikes();}, 300);
+	} else {
+		printNames();
+	}
+}
+
+var numScrolls = getNumScrolls();
+for (i = 0; i < numScrolls; i++) {
+	setTimeout(function(){
+		main();
+	}, i * 400);
+}
